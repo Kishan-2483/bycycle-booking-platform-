@@ -1,0 +1,27 @@
+.container {
+  padding: 40px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 20px auto;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: crimson;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: darkred;
+}

@@ -1,0 +1,74 @@
+/* Main Container */
+.container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Page Heading */
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0f2027;
+  font-size: 28px;
+}
+
+/* Section Titles */
+.sectionTitle {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #2c5364;
+}
+
+/* Card Style */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Profile Info Text */
+.card p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #333;
+}
+
+/* Strong Label */
+.card strong {
+  color: #0f2027;
+}
+
+/* Delete Button */
+.deleteButton {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+/* No Booking Message */
+.noData {
+  text-align: center;
+  color: gray;
+  margin-top: 20px;
+  font-style: italic;
+}
