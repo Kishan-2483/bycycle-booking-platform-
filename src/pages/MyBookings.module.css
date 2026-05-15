@@ -1,27 +1,254 @@
+/* ===== Container ===== */
 .container {
-  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 50px 32px 80px;
 }
 
-.card {
-  background: white;
-  padding: 20px;
-  margin: 20px auto;
-  width: 400px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* ===== Header ===== */
+.header {
   text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.6s ease;
 }
 
-button {
-  margin-top: 10px;
-  padding: 8px 14px;
-  background: crimson;
-  color: white;
-  border-radius: 6px;
-  border: none;
+.title {
+  font-size: var(--font-4xl);
+  font-weight: 800;
+  color: var(--color-dark);
+  letter-spacing: -1px;
+  margin-bottom: var(--space-2);
+}
+
+.subtitle {
+  font-size: var(--font-base);
+  color: var(--color-gray-500);
+}
+
+/* ===== Booking List ===== */
+.bookingList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== Card ===== */
+.card {
+  display: flex;
+  gap: 24px;
+  background: var(--color-white);
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-base);
+  animation: fadeInUp 0.5s ease both;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-primary);
+}
+
+/* Card Left Icon */
+.cardLeft {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.bikeIcon {
+  font-size: 36px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-subtle);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+
+/* Card Content */
+.cardContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.bikeModel {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+}
+
+.bookedBy {
+  font-size: var(--font-sm);
+  color: var(--color-gray-500);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bookedBy strong {
+  color: var(--color-dark);
+}
+
+.userBadge {
+  font-size: 14px;
+}
+
+/* Status Badge */
+.statusBadge {
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-accent-green);
+}
+
+.statusBadge[data-status="cancelled"] {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-accent-red);
+}
+
+.statusBadge[data-status="pending"] {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-accent-amber);
+}
+
+.statusBadge[data-status="completed"] {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--color-gray-600);
+}
+
+/* Card Details */
+.cardDetails {
+  display: flex;
+  gap: var(--space-8);
+  padding: 16px 0;
+  border-top: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-100);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailLabel {
+  font-size: var(--font-xs);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.detailValue {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.priceValue {
+  font-size: var(--font-lg);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* Card Actions */
+.cardActions {
+  display: flex;
+  gap: 12px;
+}
+
+.cancelBtn {
+  padding: 8px 20px;
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--color-accent-red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  font-family: var(--font-family);
   cursor: pointer;
+  transition: var(--transition-base);
 }
 
-button:hover {
-  background: darkred;
+.cancelBtn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ===== Loading ===== */
+.loadingList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skeleton {
+  height: 160px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, var(--color-gray-100) 25%, var(--color-gray-200) 50%, var(--color-gray-100) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ===== Empty ===== */
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: var(--space-5);
+  opacity: 0.5;
+}
+
+.empty h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-2);
+}
+
+.empty p {
+  color: var(--color-gray-500);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .card {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .cardTop {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .cardDetails {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
 }
