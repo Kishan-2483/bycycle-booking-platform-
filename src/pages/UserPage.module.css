@@ -20,14 +20,25 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 36px 32px;
+  padding: 40px 32px;
   background: var(--gradient-hero);
   color: var(--color-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.profileHeaderBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(26, 115, 232, 0.2), transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%);
+  animation: bgPan 20s linear infinite alternate;
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
   border-radius: var(--radius-full);
   background: var(--gradient-blue);
   display: flex;
@@ -38,10 +49,15 @@
   color: var(--color-white);
   box-shadow: 0 4px 20px rgba(26, 115, 232, 0.4);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 
 .profileInfo {
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .userName {
@@ -67,10 +83,21 @@
   padding: 20px 24px;
   text-align: center;
   border-right: 1px solid var(--color-gray-100);
+  transition: all 0.3s ease;
 }
 
 .metaItem:last-child {
   border-right: none;
+}
+
+.metaItem:hover {
+  background: var(--color-gray-50);
+}
+
+.metaIcon {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
 }
 
 .metaLabel {
@@ -90,9 +117,26 @@
   color: var(--color-dark);
 }
 
+.metaValueHighlight {
+  display: block;
+  font-size: var(--font-lg);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* ===== Bookings Section ===== */
 .bookingsSection {
   animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
 }
 
 .sectionTitle {
@@ -100,7 +144,15 @@
   font-weight: 800;
   color: var(--color-dark);
   letter-spacing: -0.5px;
-  margin-bottom: var(--space-6);
+}
+
+.sectionCount {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
 }
 
 .bookingList {
@@ -116,13 +168,31 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-gray-200);
   box-shadow: var(--shadow-card);
-  transition: var(--transition-base);
-  animation: fadeInUp 0.5s ease both;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: slideInStagger 0.5s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.bookingCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gradient-blue);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .bookingCard:hover {
   box-shadow: var(--shadow-card-hover);
   border-color: var(--color-primary);
+}
+
+.bookingCard:hover::before {
+  opacity: 1;
 }
 
 .bookingHeader {
@@ -147,6 +217,12 @@
   justify-content: center;
   background: var(--color-primary-subtle);
   border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.bookingCard:hover .bookingIcon {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(26, 115, 232, 0.1);
 }
 
 .bookingBikeInfo h3 {
@@ -167,6 +243,9 @@
 
 /* Status Badge */
 .statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 4px 14px;
   border-radius: var(--radius-full);
   font-size: var(--font-xs);
@@ -176,6 +255,14 @@
   white-space: nowrap;
   background: rgba(16, 185, 129, 0.1);
   color: var(--color-accent-green);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
 }
 
 .statusBadge[data-status="cancelled"] {
@@ -191,6 +278,10 @@
 .statusBadge[data-status="completed"] {
   background: rgba(100, 116, 139, 0.1);
   color: var(--color-gray-600);
+}
+
+.statusBadge[data-status="completed"] .statusDot {
+  animation: none;
 }
 
 /* Booking Details */
@@ -225,7 +316,10 @@
 .priceValue {
   font-size: var(--font-lg);
   font-weight: 800;
-  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ===== Loading ===== */
@@ -238,15 +332,28 @@
 .skeleton {
   height: 120px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(90deg, var(--color-gray-100) 25%, var(--color-gray-200) 50%, var(--color-gray-100) 75%);
-  background-size: 400% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.04), transparent);
+  animation: shineSwipe 1.5s ease-in-out infinite;
 }
 
 /* ===== Empty State ===== */
 .empty {
   text-align: center;
   padding: 60px 20px;
+  animation: fadeInUp 0.5s ease;
 }
 
 .emptyIcon {
@@ -254,6 +361,7 @@
   display: block;
   margin-bottom: var(--space-4);
   opacity: 0.5;
+  animation: float 4s ease-in-out infinite;
 }
 
 .empty p {
@@ -272,6 +380,7 @@
   font-size: 56px;
   display: block;
   margin-bottom: var(--space-5);
+  animation: float 3s ease-in-out infinite;
 }
 
 .loginPrompt h2 {
@@ -303,6 +412,12 @@
 
   .metaItem:last-child {
     border-bottom: none;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
   }
 
   .bookingHeader {

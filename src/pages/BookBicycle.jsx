@@ -15,6 +15,8 @@ function BookBicycle() {
   const [hours, setHours] = useState(0);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Fetch user profile to show "booked by"
   useEffect(() => {
@@ -43,7 +45,7 @@ function BookBicycle() {
       setHours(0);
       setTotalCost(null);
     }
-  }, [start, end, bike.pricePerHour]);
+  }, [start, end, bike?.pricePerHour]);
 
   const handleBooking = async () => {
     if (!start || !end) {
@@ -57,8 +59,8 @@ function BookBicycle() {
     setLoading(true);
     try {
       await bookBicycle(userId, bike.id, start, end);
-      alert("Booking Successful 🎉");
-      navigate("/bookings");
+      setBookingSuccess(true);
+      setTimeout(() => navigate("/bookings"), 1500);
     } catch (e) {
       alert(e.message);
     } finally {
@@ -68,22 +70,45 @@ function BookBicycle() {
 
   if (!bike) {
     return (
-      <>
+      <div className="page-enter">
         <Navbar />
         <div className={styles.container}>
-          <p>No bicycle selected. Please go back and choose one.</p>
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>🚲</span>
+            <h3>No Bicycle Selected</h3>
+            <p>Please go back and choose a bicycle to book.</p>
+          </div>
         </div>
-      </>
+      </div>
+    );
+  }
+
+  if (bookingSuccess) {
+    return (
+      <div className="page-enter">
+        <Navbar />
+        <div className={styles.container}>
+          <div className={styles.successCard}>
+            <div className={styles.successIcon}>🎉</div>
+            <h2>Booking Confirmed!</h2>
+            <p>Redirecting to your bookings...</p>
+            <div className={styles.successProgress}></div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="page-enter">
       <Navbar />
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.cardHeader}>
-            <span className={styles.bikeEmoji}>🚲</span>
+            <div className={styles.bikeEmojiWrapper}>
+              <span className={styles.bikeEmoji}>🚲</span>
+              <div className={styles.emojiGlow}></div>
+            </div>
             <h2 className={styles.bikeName}>{bike.brand} {bike.model}</h2>
             <div className={styles.priceTag}>
               <span className={styles.currency}>₹</span>
@@ -106,22 +131,32 @@ function BookBicycle() {
           <div className={styles.divider}></div>
 
           {/* Date Inputs */}
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Start Time</label>
+          <div className={`${styles.formGroup} ${focusedField === 'start' ? styles.focused : ''}`}>
+            <label className={styles.label}>
+              <span className={styles.labelIcon}>🕐</span>
+              Start Time
+            </label>
             <input
               className={styles.input}
               type="datetime-local"
               value={start}
+              onFocus={() => setFocusedField('start')}
+              onBlur={() => setFocusedField(null)}
               onChange={(e) => setStart(e.target.value)}
             />
           </div>
 
-          <div className={styles.formGroup}>
-            <label className={styles.label}>End Time</label>
+          <div className={`${styles.formGroup} ${focusedField === 'end' ? styles.focused : ''}`}>
+            <label className={styles.label}>
+              <span className={styles.labelIcon}>🕐</span>
+              End Time
+            </label>
             <input
               className={styles.input}
               type="datetime-local"
               value={end}
+              onFocus={() => setFocusedField('end')}
+              onBlur={() => setFocusedField(null)}
               onChange={(e) => setEnd(e.target.value)}
             />
           </div>
@@ -153,12 +188,12 @@ function BookBicycle() {
             {loading ? (
               <span className={styles.spinner}></span>
             ) : (
-              <>Confirm & Pay {totalCost ? `₹${totalCost}` : ""}</>
+              <>Confirm & Pay {totalCost ? `₹${totalCost}` : ""} <span className={styles.btnArrow}>→</span></>
             )}
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

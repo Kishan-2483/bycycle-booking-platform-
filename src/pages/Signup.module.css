@@ -6,6 +6,37 @@
   justify-content: center;
   padding: 40px 20px;
   background: var(--color-gray-50);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background decorations */
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bgOrb1 {
+  position: absolute;
+  top: -80px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.06), transparent 70%);
+  border-radius: 50%;
+  animation: morphBlob 15s ease-in-out infinite;
+}
+
+.bgOrb2 {
+  position: absolute;
+  bottom: -100px;
+  right: -80px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(26, 115, 232, 0.05), transparent 70%);
+  border-radius: 50%;
+  animation: morphBlob 18s ease-in-out infinite reverse;
 }
 
 /* ===== Container ===== */
@@ -17,7 +48,22 @@
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
   box-shadow: var(--shadow-xl);
-  animation: scaleIn 0.4s ease;
+  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-primary), var(--color-accent-purple));
+  background-size: 200% auto;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  animation: gradientShift 4s ease infinite;
 }
 
 /* Header */
@@ -27,9 +73,10 @@
 }
 
 .icon {
-  font-size: 40px;
+  font-size: 44px;
   display: block;
   margin-bottom: var(--space-4);
+  animation: float 3s ease-in-out infinite;
 }
 
 .heading {
@@ -48,6 +95,11 @@
 /* Form */
 .formGroup {
   margin-bottom: var(--space-5);
+  transition: transform 0.3s ease;
+}
+
+.formGroup.focused {
+  transform: scale(1.01);
 }
 
 .label {
@@ -56,6 +108,11 @@
   font-weight: 600;
   color: var(--color-dark);
   margin-bottom: var(--space-2);
+  transition: color 0.3s ease;
+}
+
+.formGroup.focused .label {
+  color: var(--color-primary);
 }
 
 .input {
@@ -67,7 +124,7 @@
   font-family: var(--font-family);
   color: var(--color-dark);
   background: var(--color-gray-50);
-  transition: var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   outline: none;
 }
 
@@ -79,6 +136,36 @@
 
 .input::placeholder {
   color: var(--color-gray-400);
+}
+
+/* Password Strength */
+.strengthBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--space-2);
+  animation: fadeIn 0.3s ease;
+}
+
+.strengthTrack {
+  flex: 1;
+  height: 4px;
+  background: var(--color-gray-100);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strengthFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.strengthLabel {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  min-width: 45px;
+  transition: color 0.3s ease;
 }
 
 /* Button */
@@ -93,21 +180,36 @@
   font-weight: 700;
   font-family: var(--font-family);
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   margin-top: var(--space-6);
+  position: relative;
+  overflow: hidden;
 }
 
 .button:hover:not(:disabled) {
-  box-shadow: var(--shadow-blue);
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-blue-lg);
+  transform: translateY(-2px);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btnArrow {
+  transition: transform 0.3s ease;
+}
+
+.button:hover .btnArrow {
+  transform: translateX(4px);
 }
 
 /* Switch */
@@ -122,12 +224,27 @@
   color: var(--color-primary);
   font-weight: 600;
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.switchLink::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.switchLink:hover::after {
+  width: 100%;
 }
 
 .switchLink:hover {
   color: var(--color-primary-dark);
-  text-decoration: underline;
 }
 
 /* Spinner */

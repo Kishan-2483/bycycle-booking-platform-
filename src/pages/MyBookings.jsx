@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUserBookings, deleteBooking, getUserProfile } from "../api";
 import Navbar from "../components/Navbar";
+import useScrollReveal from "../hooks/useScrollReveal";
 import styles from "./MyBookings.module.css";
 
 function MyBookings() {
@@ -8,6 +9,9 @@ function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
+
+  useScrollReveal();
 
   useEffect(() => {
     if (!userId) return;
@@ -25,8 +29,13 @@ function MyBookings() {
 
   const cancelBooking = async (id) => {
     if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+    setDeletingId(id);
     await deleteBooking(id);
-    setBookings(bookings.filter((b) => b.id !== id));
+    // Animate out, then remove
+    setTimeout(() => {
+      setBookings(bookings.filter((b) => b.id !== id));
+      setDeletingId(null);
+    }, 300);
   };
 
   const formatDate = (dateStr) => {
@@ -54,11 +63,13 @@ function MyBookings() {
   };
 
   return (
-    <>
+    <div className="page-enter">
       <Navbar />
       <div className={styles.container}>
         <div className={styles.header}>
+          <span className={styles.pageLabel}>Your Rides</span>
           <h1 className={styles.title}>My Bookings</h1>
+          <div className={styles.titleUnderline}></div>
           <p className={styles.subtitle}>
             {bookings.length > 0
               ? `You have ${bookings.length} booking${bookings.length > 1 ? "s" : ""}`
@@ -82,10 +93,11 @@ function MyBookings() {
           <div className={styles.bookingList}>
             {bookings.map((b, index) => {
               const price = calcTotalPrice(b);
+              const isDeleting = deletingId === b.id;
               return (
                 <div
                   key={b.id}
-                  className={styles.card}
+                  className={`${styles.card} ${isDeleting ? styles.cardDeleting : ''}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className={styles.cardLeft}>
@@ -104,6 +116,7 @@ function MyBookings() {
                         </div>
                       </div>
                       <div className={styles.statusBadge} data-status={b.status?.toLowerCase()}>
+                        <span className={styles.statusDot}></span>
                         {b.status}
                       </div>
                     </div>
@@ -133,8 +146,9 @@ function MyBookings() {
                       <button
                         className={styles.cancelBtn}
                         onClick={() => cancelBooking(b.id)}
+                        disabled={isDeleting}
                       >
-                        Cancel Booking
+                        {isDeleting ? "Cancelling..." : "Cancel Booking"}
                       </button>
                     </div>
                   </div>
@@ -144,7 +158,7 @@ function MyBookings() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

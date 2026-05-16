@@ -6,6 +6,7 @@
   min-height: calc(100vh - 70px);
   padding: 50px 20px;
   background: var(--color-gray-50);
+  position: relative;
 }
 
 /* ===== Card ===== */
@@ -17,7 +18,20 @@
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-gray-200);
   box-shadow: var(--shadow-xl);
-  animation: scaleIn 0.4s ease;
+  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent-cyan));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 /* Header */
@@ -26,10 +40,26 @@
   margin-bottom: var(--space-6);
 }
 
-.bikeEmoji {
-  font-size: 48px;
-  display: block;
+.bikeEmojiWrapper {
+  position: relative;
+  display: inline-block;
   margin-bottom: var(--space-3);
+}
+
+.bikeEmoji {
+  font-size: 52px;
+  display: block;
+  position: relative;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.emojiGlow {
+  position: absolute;
+  inset: -15px;
+  background: radial-gradient(circle, rgba(26, 115, 232, 0.1), transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 3s ease-in-out infinite;
 }
 
 .bikeName {
@@ -56,7 +86,10 @@
 .priceValue {
   font-size: var(--font-3xl);
   font-weight: 800;
-  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .perHour {
@@ -68,7 +101,7 @@
 /* Divider */
 .divider {
   height: 1px;
-  background: var(--color-gray-200);
+  background: linear-gradient(90deg, transparent, var(--color-gray-200), transparent);
   margin: var(--space-5) 0;
 }
 
@@ -81,6 +114,12 @@
   background: var(--color-primary-subtle);
   border-radius: var(--radius-md);
   border: 1px solid rgba(26, 115, 232, 0.1);
+  transition: all 0.3s ease;
+}
+
+.bookedBy:hover {
+  border-color: rgba(26, 115, 232, 0.2);
+  box-shadow: 0 0 20px rgba(26, 115, 232, 0.05);
 }
 
 .userIcon {
@@ -115,14 +154,30 @@
 /* Form */
 .formGroup {
   margin-bottom: var(--space-5);
+  transition: transform 0.3s ease;
+}
+
+.formGroup.focused {
+  transform: scale(1.01);
 }
 
 .label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: var(--font-sm);
   font-weight: 600;
   color: var(--color-dark);
   margin-bottom: var(--space-2);
+  transition: color 0.3s ease;
+}
+
+.formGroup.focused .label {
+  color: var(--color-primary);
+}
+
+.labelIcon {
+  font-size: 14px;
 }
 
 .input {
@@ -134,7 +189,7 @@
   font-family: var(--font-family);
   color: var(--color-dark);
   background: var(--color-gray-50);
-  transition: var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   outline: none;
 }
 
@@ -151,7 +206,7 @@
   border-radius: var(--radius-md);
   padding: 20px;
   margin-bottom: var(--space-6);
-  animation: fadeIn 0.3s ease;
+  animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .costRow {
@@ -194,11 +249,13 @@
   font-weight: 700;
   font-family: var(--font-family);
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
 .confirmBtn:hover:not(:disabled) {
@@ -206,9 +263,21 @@
   transform: translateY(-2px);
 }
 
+.confirmBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .confirmBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btnArrow {
+  transition: transform 0.3s ease;
+}
+
+.confirmBtn:hover .btnArrow {
+  transform: translateX(4px);
 }
 
 /* Spinner */
@@ -223,4 +292,84 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ===== Success Card ===== */
+.successCard {
+  max-width: 400px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.successIcon {
+  font-size: 64px;
+  margin-bottom: var(--space-5);
+  animation: float 2s ease-in-out infinite;
+}
+
+.successCard h2 {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--color-accent-green);
+  margin-bottom: var(--space-2);
+}
+
+.successCard p {
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-6);
+}
+
+.successProgress {
+  width: 100%;
+  height: 3px;
+  background: var(--color-gray-100);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.successProgress::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--color-accent-green);
+  border-radius: 2px;
+  animation: fillProgress 1.5s ease forwards;
+}
+
+@keyframes fillProgress {
+  to { width: 100%; }
+}
+
+/* ===== Empty State ===== */
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: var(--space-5);
+  animation: float 4s ease-in-out infinite;
+}
+
+.emptyState h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-2);
+}
+
+.emptyState p {
+  color: var(--color-gray-500);
 }

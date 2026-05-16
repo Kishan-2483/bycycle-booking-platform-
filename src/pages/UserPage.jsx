@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import useScrollReveal from "../hooks/useScrollReveal";
 import styles from "./UserPage.module.css";
 
 function UserPage() {
@@ -8,6 +9,8 @@ function UserPage() {
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useScrollReveal();
 
   useEffect(() => {
     if (!userId) return;
@@ -48,9 +51,15 @@ function UserPage() {
     return null;
   };
 
+  // Calculate total spent
+  const totalSpent = bookings.reduce((sum, b) => {
+    const price = calcTotalPrice(b);
+    return sum + (price || 0);
+  }, 0);
+
   if (!userId) {
     return (
-      <>
+      <div className="page-enter">
         <Navbar />
         <div className={styles.container}>
           <div className={styles.loginPrompt}>
@@ -59,18 +68,19 @@ function UserPage() {
             <p>You need to be logged in to view your profile.</p>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="page-enter">
       <Navbar />
       <div className={styles.container}>
         {/* Profile Card */}
         {user && (
           <div className={styles.profileCard}>
             <div className={styles.profileHeader}>
+              <div className={styles.profileHeaderBg}></div>
               <div className={styles.avatar}>
                 {user.name ? user.name.charAt(0).toUpperCase() : "U"}
               </div>
@@ -81,16 +91,19 @@ function UserPage() {
             </div>
             <div className={styles.profileMeta}>
               <div className={styles.metaItem}>
+                <span className={styles.metaIcon}>🎭</span>
                 <span className={styles.metaLabel}>Role</span>
                 <span className={styles.metaValue}>{user.role}</span>
               </div>
               <div className={styles.metaItem}>
+                <span className={styles.metaIcon}>📊</span>
                 <span className={styles.metaLabel}>Total Bookings</span>
                 <span className={styles.metaValue}>{bookings.length}</span>
               </div>
               <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>User ID</span>
-                <span className={styles.metaValue}>#{userId}</span>
+                <span className={styles.metaIcon}>💰</span>
+                <span className={styles.metaLabel}>Total Spent</span>
+                <span className={styles.metaValueHighlight}>₹{totalSpent}</span>
               </div>
             </div>
           </div>
@@ -98,7 +111,10 @@ function UserPage() {
 
         {/* Bookings Section */}
         <div className={styles.bookingsSection}>
-          <h2 className={styles.sectionTitle}>Booking History</h2>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Booking History</h2>
+            <span className={styles.sectionCount}>{bookings.length} rides</span>
+          </div>
 
           {loading ? (
             <div className={styles.loadingList}>
@@ -132,6 +148,7 @@ function UserPage() {
                         </div>
                       </div>
                       <div className={styles.statusBadge} data-status={b.status?.toLowerCase()}>
+                        <span className={styles.statusDot}></span>
                         {b.status}
                       </div>
                     </div>
@@ -163,7 +180,7 @@ function UserPage() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

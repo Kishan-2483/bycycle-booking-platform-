@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { getBicycles } from "../api";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import useScrollReveal from "../hooks/useScrollReveal";
 import styles from "./Bicycles.module.css";
 
 function Bicycles() {
   const [bikes, setBikes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredCard, setHoveredCard] = useState(null);
   const navigate = useNavigate();
+
+  useScrollReveal();
 
   useEffect(() => {
     getBicycles()
@@ -15,24 +19,45 @@ function Bicycles() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Tilt effect on card
+  const handleMouseMove = (e, index) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+    card.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${-y}deg) translateY(-4px)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.transform = "";
+    setHoveredCard(null);
+  };
+
   return (
-    <>
+    <div className="page-enter">
       <Navbar />
       <div className={styles.container}>
         <div className={styles.header}>
+          <span className={styles.pageLabel}>Our Fleet</span>
           <h1 className={styles.title}>Available Bicycles</h1>
+          <div className={styles.titleUnderline}></div>
           <p className={styles.subtitle}>Choose your perfect ride from our premium collection</p>
         </div>
 
         {loading ? (
           <div className={styles.loadingGrid}>
             {[1, 2, 3].map((i) => (
-              <div key={i} className={styles.skeleton}></div>
+              <div key={i} className={styles.skeleton}>
+                <div className={styles.skeletonIcon}></div>
+                <div className={styles.skeletonLine}></div>
+                <div className={styles.skeletonLineShort}></div>
+              </div>
             ))}
           </div>
         ) : bikes.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>🚲</span>
+            <h3>No Bicycles Available</h3>
             <p>No bicycles available right now. Check back soon!</p>
           </div>
         ) : (
@@ -42,12 +67,22 @@ function Bicycles() {
                 key={bike.id}
                 className={styles.card}
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onMouseMove={(e) => handleMouseMove(e, index)}
+                onMouseEnter={() => setHoveredCard(index)}
+                onMouseLeave={handleMouseLeave}
               >
+                <div className={styles.cardGlow}></div>
                 <div className={styles.cardBadge}>
                   {bike.count > 0 ? (
-                    <span className={styles.available}>● Available</span>
+                    <span className={styles.available}>
+                      <span className={styles.availableDot}></span>
+                      Available
+                    </span>
                   ) : (
-                    <span className={styles.outOfStock}>● Out of Stock</span>
+                    <span className={styles.outOfStock}>
+                      <span className={styles.outDot}></span>
+                      Out of Stock
+                    </span>
                   )}
                 </div>
 
@@ -85,7 +120,7 @@ function Bicycles() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
