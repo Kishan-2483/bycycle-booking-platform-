@@ -33,6 +33,15 @@ function Bicycles() {
     setHoveredCard(null);
   };
 
+  const handleBookClick = (bike) => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login");
+    } else {
+      navigate("/book", { state: bike });
+    }
+  };
+
   return (
     <div className="page-enter">
       <Navbar />
@@ -107,7 +116,7 @@ function Bicycles() {
                 <button
                   className={`${styles.bookBtn} ${bike.count <= 0 ? styles.disabledBtn : ""}`}
                   disabled={bike.count <= 0}
-                  onClick={() => navigate("/book", { state: bike })}
+                  onClick={() => handleBookClick(bike)}
                 >
                   {bike.count > 0 ? (
                     <>Book Now <span className={styles.btnArrow}>→</span></>

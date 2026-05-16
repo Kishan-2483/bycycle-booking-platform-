@@ -71,7 +71,7 @@ function LandingPage() {
             style={{ transform: `translate(${mousePos.x * 0.2}px, ${mousePos.y * 0.4}px)` }}
           ></div>
           <div className={styles.gridOverlay}></div>
-          <ParticleField particleCount={60} color="26, 115, 232" maxOpacity={0.5} />
+          <ParticleField particleCount={45} color="79, 110, 247" maxOpacity={0.25} />
         </div>
 
         {/* Floating decorative elements */}

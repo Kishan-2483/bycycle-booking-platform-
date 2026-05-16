@@ -36,7 +36,7 @@
 .titleUnderline {
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent-cyan));
+  background: var(--gradient-blue);
   border-radius: 2px;
   margin: var(--space-3) auto var(--space-4);
   animation: revealLine 0.8s ease 0.3s both;
@@ -83,7 +83,7 @@
 
 .card:hover {
   box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-primary);
+  border-color: rgba(79, 110, 247, 0.15);
 }
 
 .card:hover::before {
@@ -118,7 +118,7 @@
 
 .card:hover .bikeIcon {
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(26, 115, 232, 0.1);
+  box-shadow: 0 0 20px rgba(79, 110, 247, 0.08);
 }
 
 /* Card Content */
@@ -169,7 +169,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(52, 211, 153, 0.08);
   color: var(--color-accent-green);
 }
 
@@ -182,17 +182,17 @@
 }
 
 .statusBadge[data-status="cancelled"] {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(248, 113, 113, 0.08);
   color: var(--color-accent-red);
 }
 
 .statusBadge[data-status="pending"] {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(251, 191, 36, 0.08);
   color: var(--color-accent-amber);
 }
 
 .statusBadge[data-status="completed"] {
-  background: rgba(100, 116, 139, 0.1);
+  background: rgba(139, 144, 173, 0.08);
   color: var(--color-gray-600);
 }
 
@@ -234,7 +234,7 @@
 .priceValue {
   font-size: var(--font-lg);
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+  background: var(--gradient-blue);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -248,9 +248,9 @@
 
 .cancelBtn {
   padding: 8px 20px;
-  background: rgba(239, 68, 68, 0.08);
+  background: rgba(248, 113, 113, 0.06);
   color: var(--color-accent-red);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(248, 113, 113, 0.15);
   border-radius: var(--radius-md);
   font-size: var(--font-sm);
   font-weight: 600;
@@ -260,10 +260,10 @@
 }
 
 .cancelBtn:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 4px 15px rgba(248, 113, 113, 0.1);
 }
 
 .cancelBtn:disabled {
@@ -294,7 +294,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.04), transparent);
+  background: linear-gradient(90deg, transparent, rgba(79, 110, 247, 0.03), transparent);
   animation: shineSwipe 1.5s ease-in-out infinite;
 }
 
